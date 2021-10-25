@@ -10,7 +10,8 @@
 
 int main()
 {
-    int sockfd, len, result, i, nread;
+    int sockfd, result, i;
+    size_t len, nread;
     struct sockaddr_in address; /* Client socket address structure */
     char filename[MAX_NAME_SZ]; /* Name of file to request from server */
     char resp_from_server[MAX_MSG_SZ]; /* Contents of served file*/
@@ -39,15 +40,20 @@ int main()
     for (i = 0; i < MAX_STATIC_FILES; ++i)
     {
         char contents[MAX_NAME_SZ];
-        memset(contents, '\0', sizeof(contents));
-        read(sockfd, &contents, MAX_MSG_SZ); /* Read contents of static dir */
-        if (contents[0] != '\0')
+        memset(contents, 0, sizeof(contents));
+        nread = read(sockfd, contents, MAX_NAME_SZ); /* Read contents of static dir */
+        if (nread && contents[0] != '\0')
             printf("> %s\n", contents);
     }
     
     /* Input name of file that client wants to request */
     cli_request(filename);
-    write(sockfd, &filename, sizeof(filename)); /* Pass filename to server */
+    len = write(sockfd, &filename, sizeof(filename)); /* Pass filename to server */
+    if (len != sizeof(filename)) {
+        perror(__FILE__ " write()");
+	close(sockfd);
+	exit(1);
+    }
 
     /* Read response from server and print to console */
     nread = read(sockfd, &resp_from_server, sizeof(resp_from_server));

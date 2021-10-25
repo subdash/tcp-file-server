@@ -1,8 +1,8 @@
 all: server_process client_process
 
-CC = gcc
+CC = cc
 INCLUDE = include/
-CFLAGS = -Wall -Wextra -ansi -pedantic
+CFLAGS = -Wall -Wextra -ansi -pedantic -Werror
 
 server_process: src/server_process.c src/server_funcs.c
 	$(CC) -I$(INCLUDE) $(CFLAGS) src/server_process.c src/server_funcs.c -o server_process

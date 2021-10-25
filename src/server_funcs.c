@@ -1,4 +1,6 @@
+#define _POSIX_C_SOURCE 200112L
 #include "server_funcs.h"
+#include <sys/stat.h>
 
 char** static_file_tree(void)
 {
