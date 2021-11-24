@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <unistd.h>
 
 #include "server_funcs.h"
@@ -41,7 +42,7 @@ int main()
     puts("[SERVER] waiting...");
     while (1)
     {
-        char file_requested[MAX_MSG_SZ];
+        char file_requested[MAX_NAME_SZ];
         int fd;
         int nread;
         testfds = readfds;
